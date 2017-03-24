@@ -1,10 +1,15 @@
-#include <inc/mmu.h>
+#include <inc/mmu.h
 #include <inc/trap.h>
 
 /* Use TRAPHANDLER_NOEC for traps where the CPU doesn't push an error code.
  * It pushes a 0 in place of the error code, so the trap frame has the same
  * format in either case.
  */
+/* the marco is used to ne receive a function name and interrupt number, and  define a interrupt program
+push the error code and interrupt number to kernel stack and jump to allraps handler
+** care the trapno are load in TRAPHANDLER_NOEC look 17 18
+*/
+
 #define TRAPHANDLER_NOEC(name, num)					\
 	.globl name;							\
 	.type name, @function;						\
@@ -16,7 +21,8 @@
 
 
 .text
-
+    TRAPHANDLER_NOEC(timer,IRQ_OFFSET + IRQ_TIMER)
+    TRAPHANDLER_NOEC(kbd,IRQ_OFFSET + IRQ_KBD)   
 /* TODO: Interface declaration for ISRs
  * Note: Use TRAPHANDLER_NOEC macro define other isr enrty
  *       The Trap number are declared in inc/trap.h which might come in handy
@@ -36,9 +42,20 @@ _alltraps:
    *       You may want to leverage the "pusha" instructions to reduce your work of
    *       pushing all the general purpose registers into the stack.
 	 */
-
+/*because  in kernel stack ,we need to reverse the push order trapno ->     ds - > es -> pusha*/
+    pushl %ds
+    pushl %es
+    pusha          #  push AX CX BX SP BP SI DI
+    /*load kernel segment */
+    movw $(GD_KT), %ax
+    movw %ax , %ds
+    movw %ax , %es
 	pushl %esp # Pass a pointer which points to the Trapframe as an argument to default_trap_handler()
 	call default_trap_handler
+    popl %esp
+    popa
+    popl %es
+    popl %ds
 
 	add $8, %esp # Cleans up the pushed error code and pushed ISR number
 	iret # pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
