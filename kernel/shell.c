@@ -13,8 +13,19 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
-	{ "print_tick", "Display system tick", print_tick }
+	{ "print_tick", "Display system tick", print_tick },
+    { "chgcolor","change color of text", chgcolor }a
 };
+int chgcolor(int argc, char *argv[]){
+    if(argc == 1)
+        cprintf("NO input text colors!\n");
+    else{
+        settextcolor((unsigned char)(*argv[1]),0);
+        cprintf("Change color %c!\n",*argv[1]);
+    }   
+    return 0;
+                            
+}
 #define NCOMMANDS (sizeof(commands)/sizeof(commands[0]))
 
 
@@ -35,6 +46,17 @@ int mon_kerninfo(int argc, char **argv)
    *       Use PROVIDE inside linker script and calculate the
    *       offset.
    */
+    extern int etext;
+    extern int data_start;
+    extern int end;
+    extern int kernel_load_addr;
+    //extern int __STAB_BEGIN__;
+    //extern int __STAB_END__;
+    //extern int __STABSTR_BEGIN__;
+    //extern int __STABSTR_END__;
+    cprintf("Kernel code base start=0x%10x size = %ld\n",&kernel_load_addr,&etext-&kernel_load_addr);
+    cprintf("Kernel data base start=0x%10x size = %ld\n",&data_start,&end-&data_start);
+    cprintf("Kernel executable memory footprint: %10xKB\n");
 	return 0;
 }
 int print_tick(int argc, char **argv)

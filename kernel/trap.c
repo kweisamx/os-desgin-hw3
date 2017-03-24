@@ -7,7 +7,11 @@
  * additional information in the latter case.
  */
 static struct Trapframe *last_tf;
-
+struct Gatedesc idt[256];
+extern void timer();
+extern void kbd();
+extern void testdefault();
+struct Pseudodesc idt_pd = {sizeof(idt)-1,(uint32_t)idt };
 /* TODO: You should declare an interrupt descriptor table.
  *       In x86, there are at most 256 it.
  *
@@ -103,6 +107,16 @@ print_regs(struct PushRegs *regs)
 static void
 trap_dispatch(struct Trapframe *tf)
 {
+    if(tf->tf_trapno == IRQ_OFFSET + IRQ_KBD)
+    {
+        kbd_intr();
+        return;
+    }
+    if(tf->tf_trapno == IRQ_OFFSET + IRQ_TIMER)
+    {
+        timer_handler();
+        return;
+    }
   /* TODO: Handle specific interrupts.
    *       You need to check the interrupt number in order to tell
    *       which interrupt is currently happening since every interrupt
@@ -138,6 +152,15 @@ void default_trap_handler(struct Trapframe *tf)
 
 void trap_init()
 {
+    int i;                                                                       
+    for(i = 0;i < 256; i++)
+        SETGATE(idt[i],0,GD_KT,64*i,0);
+           
+    SETGATE(idt[IRQ_OFFSET + IRQ_KBD],0,GD_KT,kbd,0);
+    SETGATE(idt[IRQ_OFFSET + IRQ_TIMER],0,GD_KT,timer,0);
+
+    lidt(&idt_pd);
+
   /* TODO: You should initialize the interrupt descriptor table.
    *       You should setup at least keyboard interrupt and timer interrupt as
    *       the lab's requirement.
