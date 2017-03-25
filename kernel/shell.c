@@ -14,7 +14,7 @@ static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
 	{ "print_tick", "Display system tick", print_tick },
-    { "chgcolor","change color of text", chgcolor }a
+    { "chgcolor","change color of text", chgcolor }
 };
 int chgcolor(int argc, char *argv[]){
     if(argc == 1)

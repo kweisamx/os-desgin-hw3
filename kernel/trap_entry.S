@@ -1,4 +1,4 @@
-#include <inc/mmu.h
+#include <inc/mmu.h>
 #include <inc/trap.h>
 
 /* Use TRAPHANDLER_NOEC for traps where the CPU doesn't push an error code.
@@ -46,10 +46,12 @@ _alltraps:
     pushl %ds
     pushl %es
     pusha          #  push AX CX BX SP BP SI DI
+
     /*load kernel segment */
     movw $(GD_KT), %ax
     movw %ax , %ds
     movw %ax , %es
+
 	pushl %esp # Pass a pointer which points to the Trapframe as an argument to default_trap_handler()
 	call default_trap_handler
     popl %esp
