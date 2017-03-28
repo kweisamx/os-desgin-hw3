@@ -1,0 +1,49 @@
+commit fedd0dd582bddb96a6312b03e4246d15ed718139
+Author: 0556148 <kweisamx.cs05g@g2.nctu.edu.tw>
+Date:   Sat Mar 25 10:02:53 2017 +0800
+
+    finish most of all
+
+commit 35e1433435a728ab740b7beeb2601f3f91cbd14d
+Author: 0556148 <kweisamx.cs05g@g2.nctu.edu.tw>
+Date:   Fri Mar 24 22:48:48 2017 +0800
+
+    something need to be modify
+
+commit 175f037dd47bc228981d7aea66f08ea1c92fa177
+Author: 0556148 <kweisamx.cs05g@g2.nctu.edu.tw>
+Date:   Fri Mar 24 22:41:18 2017 +0800
+
+    first
+
+commit b036c12ab10679f9da088f3587847a19dd6037c9
+Author: Rudy Chin <rudychin.cs00@g2.nctu.edu.tw>
+Date:   Wed Mar 15 23:49:19 2017 +0800
+
+    specify branch in doc
+
+commit 18dea45720d1b2f8bd1b1565647209f9f57d7437
+Author: Rudy Chin <rudychin.cs00@g2.nctu.edu.tw>
+Date:   Wed Mar 15 23:47:45 2017 +0800
+
+    change to 2017
+
+commit e69bca59a677b083704b8649a057a790286fa7bd
+Author: RudyChin <bb1168kk@gmail.com>
+Date:   Thu Mar 31 13:57:44 2016 +0800
+
+    Fix initialization bugs of keyboard driver
+    
+    Add macro to readibility and fix bugs of uninitilization
+
+commit 63e120b1f844a1436545e3723badcf6fdb8b9931
+Author: RudyChin <bb1168kk@gmail.com>
+Date:   Wed Mar 23 15:23:16 2016 +0800
+
+    Add specification and reference of lab3
+
+commit 9c9681e76b52fe4da5f511fbea6708b62a15b1dc
+Author: RudyChin <bb1168kk@gmail.com>
+Date:   Wed Mar 23 15:09:21 2016 +0800
+
+    Initial Commit with Lab 3
