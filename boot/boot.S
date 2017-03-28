@@ -42,7 +42,7 @@ protcseg:
 
 	# Set up the stack pointer and call into C.
 	  movl    $start, %esp
-	  call bootmain
+	  call bootmain #call and run kernel just return when something is wrong
 loop:
 	jmp loop
 

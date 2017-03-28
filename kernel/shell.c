@@ -50,13 +50,9 @@ int mon_kerninfo(int argc, char **argv)
     extern int data_start;
     extern int end;
     extern int kernel_load_addr;
-    //extern int __STAB_BEGIN__;
-    //extern int __STAB_END__;
-    //extern int __STABSTR_BEGIN__;
-    //extern int __STABSTR_END__;
-    cprintf("Kernel code base start=0x%10x size = %ld\n",&kernel_load_addr,&etext-&kernel_load_addr);
-    cprintf("Kernel data base start=0x%10x size = %ld\n",&data_start,&end-&data_start);
-    cprintf("Kernel executable memory footprint: %10xKB\n");
+    cprintf("Kernel code base start=0x%10x size = %ld\n",&kernel_load_addr,(int)&etext-(int)&kernel_load_addr);
+    cprintf("Kernel data base start=0x%10x size = %ld\n",&data_start,(int)&end-(int)&data_start);
+    cprintf("Kernel executable memory footprint: %ldKB\n",((int)&end-(int)&kernel_load_addr)/1024);
 	return 0;
 }
 int print_tick(int argc, char **argv)
