@@ -9,6 +9,7 @@
 extern void init_video(void);
 void kernel_main(void)
 {
+    int *ptr;
 	init_video();
 
 	pic_init();
@@ -16,10 +17,18 @@ void kernel_main(void)
    */
 	 kbd_init();
 	 timer_init();
-     trap_init();
+<<<<<<< HEAD
+=======
+	 trap_init();
+     mem_init();
+>>>>>>> bcaa209a1609ada3e98f4d025f49946cc7152525
 
 	/* Enable interrupt */
     __asm __volatile("sti");
+
+    /* Test for page fault handler */
+    ptr = (int*)(0x12345678);
+    //*ptr = 1;
 
 	shell();
 }
