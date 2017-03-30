@@ -157,8 +157,8 @@ void trap_init()
      //   SETGATE(idt[i],0,GD_KT,64*i,0);
            //it is means to map idt to function
            //trap_entry.s is to define the function of handler
-    SETGATE(idt[IRQ_OFFSET + IRQ_KBD],0,GD_KT,kbd,0);
-    SETGATE(idt[IRQ_OFFSET + IRQ_TIMER],0,GD_KT,timer,0);
+ //   SETGATE(idt[IRQ_OFFSET + IRQ_KBD],0,GD_KT,kbd,0);
+   // SETGATE(idt[IRQ_OFFSET + IRQ_TIMER],0,GD_KT,timer,0);
 
     lidt(&idt_pd);
 
