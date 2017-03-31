@@ -220,13 +220,8 @@ kbd_intr(void)
 void kbd_init(void)
 {
 	// Drain the kbd buffer so that Bochs generates interrupts.
-<<<<<<< HEAD
     cons.rpos = 0;
     cons.wpos = 0;
-=======
-    cons.rpos = 0;
-    cons.wpos = 0;
->>>>>>> bcaa209a1609ada3e98f4d025f49946cc7152525
 	kbd_intr();
 	irq_setmask_8259A(irq_mask_8259A & ~(1<<IRQ_KBD));
 }

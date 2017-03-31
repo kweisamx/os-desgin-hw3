@@ -65,7 +65,7 @@ protcseg:
 	# Set up the stack pointer and call into C.
 	  movl    $start, %esp
     7c2c:	bc 00 7c 00 00       	mov    $0x7c00,%esp
-	  call bootmain
+	  call bootmain #call and run kernel just return when something is wrong
     7c31:	e8 b9 00 00 00       	call   7cef <bootmain>
 
 00007c36 <loop>:

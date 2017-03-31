@@ -17,11 +17,8 @@ void kernel_main(void)
    */
 	 kbd_init();
 	 timer_init();
-<<<<<<< HEAD
-=======
 	 trap_init();
      mem_init();
->>>>>>> bcaa209a1609ada3e98f4d025f49946cc7152525
 
 	/* Enable interrupt */
     __asm __volatile("sti");
