@@ -23,6 +23,7 @@ push the error code and interrupt number to kernel stack and jump to allraps han
 .text
     TRAPHANDLER_NOEC(timer,IRQ_OFFSET + IRQ_TIMER)
     TRAPHANDLER_NOEC(kbd,IRQ_OFFSET + IRQ_KBD)   
+    TRAPHANDLER_NOEC(pagefault,T_PGFLT)
 /* TODO: Interface declaration for ISRs
  * Note: Use TRAPHANDLER_NOEC macro define other isr enrty
  *       The Trap number are declared in inc/trap.h which might come in handy

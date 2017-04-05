@@ -10,6 +10,7 @@ static struct Trapframe *last_tf;
 struct Gatedesc idt[256];
 extern void timer();
 extern void kbd();
+extern void pagefault();
 extern void testdefault();
 struct Pseudodesc idt_pd = {sizeof(idt)-1,(uint32_t)idt };
 /* TODO: You should declare an interrupt descriptor table.
@@ -117,6 +118,11 @@ trap_dispatch(struct Trapframe *tf)
         timer_handler();
         return;
     }
+    if(tf->tf_trapno == T_PGFLT)
+    {
+		cprintf("0556148 Page Fault @ 0x%08x\n", rcr2());
+        while(1);
+    }
   /* TODO: Handle specific interrupts.
    *       You need to check the interrupt number in order to tell
    *       which interrupt is currently happening since every interrupt
@@ -157,9 +163,9 @@ void trap_init()
      //   SETGATE(idt[i],0,GD_KT,64*i,0);
            //it is means to map idt to function
            //trap_entry.s is to define the function of handler
- //   SETGATE(idt[IRQ_OFFSET + IRQ_KBD],0,GD_KT,kbd,0);
-   // SETGATE(idt[IRQ_OFFSET + IRQ_TIMER],0,GD_KT,timer,0);
-
+    SETGATE(idt[IRQ_OFFSET + IRQ_KBD],0,GD_KT,kbd,0);
+    SETGATE(idt[IRQ_OFFSET + IRQ_TIMER],0,GD_KT,timer,0);
+    SETGATE(idt[T_PGFLT],1,GD_KT,pagefault,0);
     lidt(&idt_pd);
 
   /* TODO: You should initialize the interrupt descriptor table.
