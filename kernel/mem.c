@@ -163,7 +163,6 @@ mem_init(void)
 	check_page_free_list(1);
 	check_page_alloc();
 	check_page();
-    cprintf("hi\n");
 	//////////////////////////////////////////////////////////////////////
 	// Now we set up virtual memory
 
@@ -401,30 +400,6 @@ pgdir_walk(pde_t *pgdir, const void *va, int create)
     pte_t *result;
     result = KADDR(PTE_ADDR(pgdir[pagedir_index]));//PTE_ADDR , the address of page table or dir,inc/mmu.h,KADDR is phy addr to kernel viruial addr , kernel/mem.h
     return &result[pagetable_index];
-    /*
-    unsigned int page_off;
-    pte_t *page_base;
-    struct PageInfo *new_page;
-    unsigned int dic_off = PDX(va);
-    pde_t *dic_entry_ptr= pgdir + dic_off;
-    if(!(*dic_entry_ptr & PTE_P))
-    {
-        if(create)
-        {
-            new_page = page_alloc(1);
-            if(new_page ==NULL) return NULL;
-            new_page->pp_ref++;
-            *dic_entry_ptr = (page2pa(new_page)|PTE_P |PTE_W|PTE_U);
-
-        }
-        else 
-          return NULL;  
-    }
-    page_off = PTX(va);
-    page_base = KADDR(PTE_ADDR(*dic_entry_ptr));
-    return &page_base[page_off];
-    */
-
 }
 
 //
