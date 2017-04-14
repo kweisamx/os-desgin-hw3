@@ -6,29 +6,29 @@
 
 .globl start
 start:
-	.code16                     # Assemble for 16-bit mode
+.code16                     # Assemble for 16-bit mode
 
-	# Set up the important data segment registers (DS, ES, SS).
-	xorw    %ax,%ax             # Segment number zero
-	movw    %ax,%ds             # -> Data Segment
-	movw    %ax,%es             # -> Extra Segment
-	movw    %ax,%ss             # -> Stack Segment
+# Set up the important data segment registers (DS, ES, SS).
+xorw    %ax,%ax             # Segment number zero
+movw    %ax,%ds             # -> Data Segment
+movw    %ax,%es             # -> Extra Segment
+movw    %ax,%ss             # -> Stack Segment
 
-	cli                         # Disable interrupts
-	cld                         # String operations increment
+cli                         # Disable interrupts
+cld                         # String operations increment
 
-	# Switch from real to protected mode, using a bootstrap GDT
-	# and segment translation that makes virtual addresses 
-	# identical to their physical addresses, so that the 
-	# effective memory map does not change during the switch.
-	lgdt    gdtdesc
-	movl    %cr0, %eax
-	orl     $CR0_PE_ON, %eax
-	movl    %eax, %cr0
+# Switch from real to protected mode, using a bootstrap GDT
+# and segment translation that makes virtual addresses 
+# identical to their physical addresses, so that the 
+# effective memory map does not change during the switch.
+lgdt    gdtdesc
+movl    %cr0, %eax
+orl     $CR0_PE_ON, %eax
+movl    %eax, %cr0
 
-	# Jump to next instruction, but in 32-bit code segment.
-	# Switches processor into 32-bit mode.
-	ljmp    $PROT_MODE_CSEG, $protcseg
+# Jump to next instruction, but in 32-bit code segment.
+# Switches processor into 32-bit mode.
+ljmp    $PROT_MODE_CSEG, $protcseg
 
 .code32                     # Assemble for 32-bit mode
 protcseg:
@@ -44,29 +44,17 @@ protcseg:
 	  movl    $start, %esp
 	  call bootmain #call and run kernel just return when something is wrong
 loop:
-	jmp loop
+jmp loop
 
 # Bootstrap GDT
-	.p2align 2                                # force 4 byte alignment
+.p2align 2                                # force 4 byte alignment
 gdt:
-# TODO: Fillup GDT entry with SEG macro
-#       One for kernel code segment
-#       One for kernel data segment
-#
-#       Please reference lab3_reference.pdf for the meaning of
-#       each bit inside segment descriptor.
-#
-#       You may reference mmu.h for Application Segment Type for 
-#       easy-to-use macro when defining segmentation type.
+SEG_NULL    # NULL segment
 
 	SEG_NULL    # NULL segment
     SEG(STA_X|STA_R ,0x0,0xffffffff)     # Kernel code segment (type,base,limit)
     SEG(STA_W,0x0,0xffffffff)     # Kernel data segment
 
-# TODO: Please fillup the GDT register for gdt in order to used
-#       with "lgdt" instruction.
-# Note: You can reference lab3_reference page 13 for detail meaning
-#       of each bit of GDT register.
 gdtdesc: 
     .word  gdtdesc-gdt-1# gdt limit (the gdt length)
     .long  gdt  # gdt base (from gdt to getdesc) 
