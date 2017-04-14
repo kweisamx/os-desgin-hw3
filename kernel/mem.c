@@ -204,7 +204,7 @@ mem_init(void)
     boot_map_region(kern_pgdir, IOPHYSMEM, ROUNDUP((EXTPHYSMEM - IOPHYSMEM), PGSIZE), IOPHYSMEM, (PTE_W) | (PTE_P));
 
 	// Check that the initial page directory has been set up correctly.
-	check_kern_pgdir();
+	//check_kern_pgdir();
 
 	// Switch from the minimal entry page directory to the full kern_pgdir
 	// page table we just created.	Our instruction pointer should be
@@ -457,18 +457,15 @@ boot_map_region(pde_t *pgdir, uintptr_t va, size_t size, physaddr_t pa, int perm
 int
 page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 {
-    
     /* TODO */
-    
     pte_t *pte = pgdir_walk(pgdir,(void *)va,1);
     if(pte==NULL)
         return -E_NO_MEM;
     pp->pp_ref++;
-    if(*pte &PTE_P)
+    if(*pte & PTE_P)
         page_remove(pgdir,va);
     *pte = page2pa(pp) | perm | PTE_P;
     return 0;
-    
 }
 
 //

@@ -30,9 +30,9 @@ entry:
 
 	# Now paging is enabled, but we're still running at a low EIP
 	# (why is this okay?).  Jump up above KERNBASE before entering
-	# C code.
+	# C code. # because the [0,4M] has map to the pa
 	mov	$relocated, %eax
-	jmp	*%eax
+	jmp	*%eax # it can reset the eip
 
 relocated:
 

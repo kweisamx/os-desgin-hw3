@@ -27,6 +27,10 @@ pde_t entry_pgdir[NPDENTRIES] = {
 		= ((uintptr_t)entry_pgtable - KERNBASE) + PTE_P + PTE_W
 };
 
+//this just two page talbe entry 0 and 80000000,the index of these two number is 4MB,they will map to pa the same pa
+
+
+
 // Entry 0 of the page table maps to physical page 0, entry 1 to
 // physical page 1, etc.
 __attribute__((__aligned__(PGSIZE)))
