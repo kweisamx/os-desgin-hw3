@@ -7,70 +7,70 @@ Disassembly of section .text:
 00007c00 <start>:
 .globl start
 start:
-	.code16                     # Assemble for 16-bit mode
+.code16                     # Assemble for 16-bit mode
 
-	# Set up the important data segment registers (DS, ES, SS).
-	xorw    %ax,%ax             # Segment number zero
+# Set up the important data segment registers (DS, ES, SS).
+xorw    %ax,%ax             # Segment number zero
     7c00:	31 c0                	xor    %eax,%eax
-	movw    %ax,%ds             # -> Data Segment
+movw    %ax,%ds             # -> Data Segment
     7c02:	8e d8                	mov    %eax,%ds
-	movw    %ax,%es             # -> Extra Segment
+movw    %ax,%es             # -> Extra Segment
     7c04:	8e c0                	mov    %eax,%es
-	movw    %ax,%ss             # -> Stack Segment
+movw    %ax,%ss             # -> Stack Segment
     7c06:	8e d0                	mov    %eax,%ss
 
-	cli                         # Disable interrupts
+cli                         # Disable interrupts
     7c08:	fa                   	cli    
-	cld                         # String operations increment
+cld                         # String operations increment
     7c09:	fc                   	cld    
 
-	# Switch from real to protected mode, using a bootstrap GDT
-	# and segment translation that makes virtual addresses 
-	# identical to their physical addresses, so that the 
-	# effective memory map does not change during the switch.
-	lgdt    gdtdesc
+# Switch from real to protected mode, using a bootstrap GDT
+# and segment translation that makes virtual addresses 
+# identical to their physical addresses, so that the 
+# effective memory map does not change during the switch.
+lgdt    gdtdesc
     7c0a:	0f 01 16             	lgdtl  (%esi)
     7c0d:	50                   	push   %eax
     7c0e:	7c 0f                	jl     7c1f <protcseg+0x1>
-	movl    %cr0, %eax
+movl    %cr0, %eax
     7c10:	20 c0                	and    %al,%al
-	orl     $CR0_PE_ON, %eax
+orl     $CR0_PE_ON, %eax
     7c12:	66 83 c8 01          	or     $0x1,%ax
-	movl    %eax, %cr0
+movl    %eax, %cr0
     7c16:	0f 22 c0             	mov    %eax,%cr0
 
-	# Jump to next instruction, but in 32-bit code segment.
-	# Switches processor into 32-bit mode.
-	ljmp    $PROT_MODE_CSEG, $protcseg
+# Jump to next instruction, but in 32-bit code segment.
+# Switches processor into 32-bit mode.
+ljmp    $PROT_MODE_CSEG, $protcseg
     7c19:	ea 1e 7c 08 00 66 b8 	ljmp   $0xb866,$0x87c1e
 
 00007c1e <protcseg>:
 
 .code32                     # Assemble for 32-bit mode
 protcseg:
-	# Set up the protected-mode data segment registers
-	movw    $PROT_MODE_DSEG, %ax    # Our data segment selector
+# Set up the protected-mode data segment registers
+movw    $PROT_MODE_DSEG, %ax    # Our data segment selector
     7c1e:	66 b8 10 00          	mov    $0x10,%ax
-	movw    %ax, %ds                # -> DS: Data Segment
+movw    %ax, %ds                # -> DS: Data Segment
     7c22:	8e d8                	mov    %eax,%ds
-	movw    %ax, %es                # -> ES: Extra Segment
+movw    %ax, %es                # -> ES: Extra Segment
     7c24:	8e c0                	mov    %eax,%es
-	movw    %ax, %fs                # -> FS
+movw    %ax, %fs                # -> FS
     7c26:	8e e0                	mov    %eax,%fs
-	movw    %ax, %gs                # -> GS
+movw    %ax, %gs                # -> GS
     7c28:	8e e8                	mov    %eax,%gs
-	movw    %ax, %ss                # -> SS: Stack Segment
+movw    %ax, %ss                # -> SS: Stack Segment
     7c2a:	8e d0                	mov    %eax,%ss
 
-	# Set up the stack pointer and call into C.
-	  movl    $start, %esp
+# Set up the stack pointer and call into C.
+movl    $start, %esp
     7c2c:	bc 00 7c 00 00       	mov    $0x7c00,%esp
-	  call bootmain #call and run kernel just return when something is wrong
+call bootmain
     7c31:	e8 b9 00 00 00       	call   7cef <bootmain>
 
 00007c36 <loop>:
 loop:
-	jmp loop
+jmp loop
     7c36:	eb fe                	jmp    7c36 <loop>
 
 00007c38 <gdt>:
